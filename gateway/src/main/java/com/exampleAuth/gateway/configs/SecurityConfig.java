@@ -8,17 +8,15 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebFluxSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
         return http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF protection
-                .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/auth/**").permitAll() // Allow public access to login and token endpoints
-                        .anyExchange().authenticated() // Protect all other endpoints
-                )
+                .csrf().disable() // Disable CSRF protection
+                .authorizeExchange()
+                .anyExchange().permitAll() // Allow all requests (gateway handles security via filters)
+                .and()
                 .build();
     }
 
